@@ -1,0 +1,13 @@
+<!doctype html><meta charset="utf-8"><title>relay</title>
+<script>
+(async () => {
+  const names = (new URLSearchParams(location.search).get('f') || '').split(',').filter(Boolean);
+  const files = [];
+  for (const n of names) {
+    const blob = await fetch('shots/' + n, { cache: 'no-store' }).then(r => r.blob());
+    files.push({ name: n, blob });
+  }
+  (window.opener || window.parent).postMessage({ relay: 'yoosh', files }, 'https://appstoreconnect.apple.com');
+  document.body.textContent = 'sent ' + files.length;
+})();
+</script>
